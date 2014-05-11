@@ -1,0 +1,19 @@
+{
+  "name": "angularjs-l10n",
+  "version": "1.0.0",
+  "main": "./src/angularjs-l10n.js",
+  "homepage": "https://github.com/ONE001/angularjs-l10n",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ONE001/angularjs-l10n.git"
+  },
+  "dependencies": {
+  	"angular": ">= 1.2.16"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "l10n",
+    "localization",
+    "translation"
+  ]
+}
