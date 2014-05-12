@@ -11,17 +11,19 @@
   </head>
 
   <body ng-cloak>
-    <div>
+    <div ng-controller="MyCtrl">
       <span>{{ "Hello World!" | trans }}</span>
-      <br/>
+      <br />
       <span>{{ "Test" | trans }}</span>
     </div>
 
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="src/angularjs-l10n.js"></script>
     <script>
-      angular.module('myApp', ['l10n']).config(['l10nProvider', function(l10n) {
-        l10n.setLocale('en');
+      var module = angular.module('myApp', ['l10n']);
+
+      module.config(['l10nProvider', function(l10n) {
+        l10n.setLocale('ru');
 
         // Test
         l10n.add('en', {
@@ -30,6 +32,13 @@
 
         // Hello World!
         l10n.pathToFile('translations/');
+      }]);
+
+      module.controller('MyCtrl', ['$scope', 'l10n', function($scope, l10n) {
+        setTimeout(function() {
+          l10n.setLocale('en');
+          l10n.add('en', {'Test': 'Test2'});
+        }, 3000);
       }]);
     </script>
   </body>

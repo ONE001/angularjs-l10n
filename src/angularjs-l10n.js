@@ -4,45 +4,56 @@ angular
   .provider('l10n', function() {
     var messages = {},
         pathToFile,
-        currentLocale;
+        currentLocale,
+        setLocale = function(loc) {
+          if (!loc || !angular.isString(loc)) {
+            throw new Error('locale must be defined as a string');
+          }
 
-    this.setLocale = function(loc) {
-      currentLocale = loc;
-    };
+          currentLocale = loc;
+        },
+        add = function(locale, m) {
+          if (!messages[locale]) {
+            messages[locale] = {};
+          }
+
+          return angular.extend(messages[locale], m);
+        }
+      ;
+
+    this.setLocale = setLocale;
 
     this.pathToFile = function(path) {
     	pathToFile = path;
     };
 
-    this.add = function(locale, m) {
-    	if (!messages[locale]) {
-    		messages[locale] = {};
-    	}
-
-    	return angular.extend(messages[locale], m);
-    },
+    this.add = add,
 
     this.$get = ['$http', function($http) {
     	if (!currentLocale) {
     		throw new Error('You have to to set "locale"');
     	}
 
-    	if (pathToFile) {
-	      var that = this;
+      var init = function() {
+        if (pathToFile) {
+          var that = this;
 
-	      if (!/\/$/.test(pathToFile)) {
-	        pathToFile += '/';
-	      }
+          if (!/\/$/.test(pathToFile)) {
+            pathToFile += '/';
+          }
 
-	      $http
-	        .get(pathToFile + currentLocale + '.json')
-	        .success(
-	          function(response) {
-	          	that.add(currentLocale, response);
-	          }
-	        )
-	      ;
-	    }
+          $http
+            .get(pathToFile + currentLocale + '.json')
+            .success(
+              function(response) {
+                add(currentLocale, response);
+              }
+            )
+          ;
+        }
+      };
+
+      init.call(this);
 
       return {
         trans: function(str) {
@@ -51,6 +62,11 @@ angular
         getLocale: function() {
           return currentLocale;
         },
+        setLocale: function() {
+          setLocale.apply(this, arguments);
+          init.call(this);
+        },
+        add: add,
       };
     }];
   })
