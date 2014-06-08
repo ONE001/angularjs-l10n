@@ -30,27 +30,23 @@ angular
     this.add = add,
 
     this.$get = ['$http', function($http) {
-    	if (!currentLocale) {
-    		throw new Error('You have to to set "locale"');
-    	}
-
       var init = function() {
-        if (pathToFile) {
-          var that = this;
-
-          if (!/\/$/.test(pathToFile)) {
-            pathToFile += '/';
-          }
-
-          $http
-            .get(pathToFile + currentLocale + '.json')
-            .success(
-              function(response) {
-                add(currentLocale, response);
-              }
-            )
-          ;
+        if (!pathToFile || !currentLocale) {
+          return;
         }
+
+        if (!/\/$/.test(pathToFile)) {
+          pathToFile += '/';
+        }
+
+        $http
+          .get(pathToFile + currentLocale + '.json')
+          .success(
+            function(response) {
+              add(currentLocale, response);
+            }
+          )
+        ;
       };
 
       init.call(this);
