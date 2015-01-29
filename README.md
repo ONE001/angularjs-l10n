@@ -12,14 +12,16 @@ bower install angularjs-l10n
 angular.module('myApp', ['l10n']);
 ```
 
-You can use either external json files with translations or just add translations from your main.js
+You can use either external files with translations or just add translations from your main.js
 
-For external JSON files you have to create directory with json files inside. Each file for each localization. For example en.json.
+For external files you have to create directory with files inside. Each file for each localization. For example en.json.
 
 ## Configure
 ```javascript
 angular.module('myApp', ['l10n']).config(['l10nProvider', function(l10n) {
   l10n.setLocale('en'); // first of all you must set locale. You can take it from anywhere, for instance navigator.language
+  
+  l10n.setExtension('js'); // not required. By default 'json'
   
   l10n.pathToFile('translations/'); // if you set pathToFile, your JSON file with translations from that directory will be loaded
   
