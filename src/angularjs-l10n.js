@@ -3,6 +3,7 @@ angular
 
   .provider('l10n', function() {
     var messages = {},
+        ext = 'json',
         pathToFile,
         currentLocale,
         setLocale = function(loc) {
@@ -27,6 +28,10 @@ angular
     	pathToFile = path;
     };
 
+    this.setExtension = function(e) {
+      ext = e;
+    };
+
     this.add = add,
 
     this.$get = ['$http', function($http) {
@@ -40,7 +45,7 @@ angular
         }
 
         $http
-          .get(pathToFile + currentLocale + '.json')
+          .get(pathToFile + currentLocale + '.' + ext)
           .success(
             function(response) {
               add(currentLocale, response);
